@@ -16,4 +16,4 @@
 #get the latest report.
 report_id="maldet -e list | head -n 6 | tail -n 1 | awk '{ print $7}'"
 #send the latest report to email
-/usr/local/maldetect/maldet -e $report_id notifications@netpower.no >> /dev/null 2>&1
+/usr/local/maldetect/maldet -e $report_id aaa@xyz.com >> /dev/null 2>&1
