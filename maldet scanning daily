@@ -1,0 +1,19 @@
+#!/bin/bash
+# clear quarantine/session/tmp data every 14 days (336 - (24 * 14))
+/usr/sbin/tmpwatch 336 /usr/local/maldetect/tmp >> /dev/null 2>&1
+/usr/sbin/tmpwatch 336 /usr/local/maldetect/sess >> /dev/null 2>&1
+/usr/sbin/tmpwatch 336 /usr/local/maldetect/quarantine >> /dev/null 2>&1
+/usr/sbin/tmpwatch 336 /usr/local/maldetect/pub/*/ >> /dev/null 2>&1
+
+# check for new release version
+/usr/local/maldetect/maldet -d >> /dev/null 2>&1
+
+# check for new definition set
+/usr/local/maldetect/maldet -u >> /dev/null 2>&1
+
+#scan the last 7 days (default) of file changes
+/usr/local/maldetect/maldet -b -a /var/www/vhosts/ >> /dev/null 2>&1
+#get the latest report.
+report_id="maldet -e list | head -n 6 | tail -n 1 | awk '{ print $7}'"
+#send the latest report to email
+/usr/local/maldetect/maldet -e $report_id notifications@netpower.no >> /dev/null 2>&1
